@@ -1,5 +1,5 @@
-import { King } from "./king.ts";
 import { type File, type Rank, Square } from "./square.ts";
+import type { Vector } from "./rules.ts";
 
 type Grid = Square[][];
 
@@ -9,6 +9,11 @@ export class Board {
 
   constructor() {
     this.grid = Board.makegrid();
+  }
+
+  /** Get square at position */
+  public get(file: File, rank: Rank): Square {
+    return this.grid[rank - 1][file.charCodeAt(0) - "a".charCodeAt(0)];
   }
 
   /** Render the board as a string for display on an ansi terminal */
@@ -26,6 +31,29 @@ export class Board {
     }
     str += "   a  b  c  d  e  f  g  h \n";
     return str;
+  }
+
+  /**
+   * Returns the Square at an offset vector from a given Square.
+   * Or returns undefined if the offset is outside of board limits.
+   * @param square The starting square.
+   * @param offset The vector to offset by, in the format `[rank, file]`.
+   * @returns The target Square or undefined.
+   */
+  target(square: Square, offset: Vector): Square | undefined {
+    const newRank = square.rank + offset[0];
+    const newFileCharCode = square.file.charCodeAt(0) + offset[1];
+
+    if (
+      newRank < 1 || newRank > 8 ||
+      newFileCharCode < "a".charCodeAt(0) ||
+      newFileCharCode > "h".charCodeAt(0)
+    ) {
+      return undefined;
+    }
+
+    const fileIndex = newFileCharCode - "a".charCodeAt(0);
+    return this.grid[newRank - 1][fileIndex];
   }
 
   /** Create an 8 by 8 empty board */

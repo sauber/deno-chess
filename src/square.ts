@@ -1,5 +1,4 @@
-import type { Color } from "./types.ts";
-import type { Piece } from "./piece.ts";
+import type { Color, Piece } from "./rules.ts";
 
 /** List of valid names of squares from a1 to h8 */
 export type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
