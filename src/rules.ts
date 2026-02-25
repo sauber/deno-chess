@@ -28,7 +28,7 @@ export type Piece = {
   // Valid moves
   movements: Movements;
   // Step movement or runner over contigues sqares
-  recursive: boolean;
+  slide: boolean;
 };
 
 export const BlackKing: Piece = {
@@ -46,7 +46,7 @@ export const BlackKing: Piece = {
     [1, 0],
     [1, 1],
   ],
-  recursive: false,
+  slide: false,
 };
 
 export const WhiteKing: Piece = Object.assign({}, BlackKing, {

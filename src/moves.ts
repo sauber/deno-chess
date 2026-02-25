@@ -1,5 +1,5 @@
 import type { Board } from "./board.ts";
-import type { Piece, Vector } from "./rules.ts";
+import type { Color, Piece, Vector } from "./rules.ts";
 import type { Square } from "./square.ts";
 
 // A move is from one square to another
@@ -55,11 +55,27 @@ export function validMoves(
 ): Moves {
   const moves: Moves = [];
   for (const vector of piece.movements) {
-    if (piece.recursive) moves.push(...recursive(piece, square, vector, board));
+    if (piece.slide) moves.push(...recursive(piece, square, vector, board));
     else {
       const move = step(piece, square, vector, board);
       if (move) moves.push(move);
     }
   }
+  return moves;
+}
+
+/** All valid moves for a player */
+export function playerMoves(color: Color, board: Board): Moves {
+  // Find pieces on squares belonging to player
+  const squares: Square[] = board.pieces(color);
+
+  // List of all possible moves for player
+  const moves: Move[] = [];
+  for (const square of squares) {
+    if (square.piece) {
+      moves.push(...validMoves(square.piece, square, board));
+    }
+  }
+
   return moves;
 }
