@@ -5,18 +5,17 @@ import { WhiteKing } from "./rules.ts";
 
 Deno.test("Instance", () => {
   // Create a board
-  const board = new Board();
-  const square = board.square("a", 1);
-  square.piece = WhiteKing;
+  let board = new Board();
+  board = board.place(WhiteKing, "a", 1);
 
   // Display initial board
   console.log(board.toString());
 
   // Let player move a piece
-  const policy = RandomPolicy;
-  const player = new Player("white", policy);
-  player.move(board);
+  const player = new Player("white", RandomPolicy);
+  const move = player.move(board);
+  const newBoard = move ? board.move(move[0], move[1]) : board;
 
   // Display updated board
-  console.log(board.toString());
+  console.log(newBoard.toString());
 });

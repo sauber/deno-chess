@@ -6,11 +6,11 @@ import { BlackKing, WhiteKing } from "./rules.ts";
 import { RandomPolicy } from "./policy.ts";
 
 // A board with kings placed in corners
-const board = new Board();
-board.square("a", 1).piece = WhiteKing;
-board.square("h", 1).piece = WhiteKing;
-board.square("a", 8).piece = BlackKing;
-board.square("h", 8).piece = BlackKing;
+const board = new Board()
+  .place(WhiteKing, "a", 1)
+  .place(WhiteKing, "h", 1)
+  .place(BlackKing, "a", 8)
+  .place(BlackKing, "h", 8);
 
 // Players with random policy
 const p1 = new Player("white", RandomPolicy);

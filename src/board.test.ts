@@ -17,17 +17,20 @@ Deno.test("Square", () => {
 Deno.test("Pieces", () => {
   const board = new Board();
 
-  // Place a white piece on black square and white square
-  board.square("a", 1).piece = WhiteKing;
-  board.square("h", 1).piece = WhiteKing;
+  // Place white pieces
+  const boardWithWhite = board
+    .place(WhiteKing, "a", 1)
+    .place(WhiteKing, "h", 1);
 
-  const squares = board.pieces("white");
+  const squares = boardWithWhite.pieces("white");
   assertEquals(squares.length, 2);
   assertEquals(squares[0].piece?.name, "king");
 
-  // Place a black piece on black square and white square
-  board.square("a", 8).piece = BlackKing;
-  board.square("h", 8).piece = BlackKing;
-
-  console.log(board.toString());
+  // Place black pieces
+  const finalBoard = boardWithWhite.place(BlackKing, "a", 8).place(
+    BlackKing,
+    "h",
+    8,
+  );
+  console.log(finalBoard.toString());
 });

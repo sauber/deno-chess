@@ -1,4 +1,5 @@
 import type { Board } from "./board.ts";
+import { isCheck } from "./check.ts";
 import type { Color, Piece, Vector } from "./rules.ts";
 import type { Square } from "./square.ts";
 
@@ -48,7 +49,7 @@ function recursive(
 }
 
 /** For a piece on a board generate list of valid moves */
-export function validMoves(
+export function pieceMoves(
   piece: Piece,
   square: Square,
   board: Board,
@@ -73,9 +74,27 @@ export function playerMoves(color: Color, board: Board): Moves {
   const moves: Move[] = [];
   for (const square of squares) {
     if (square.piece) {
-      moves.push(...validMoves(square.piece, square, board));
+      moves.push(...pieceMoves(square.piece, square, board));
     }
   }
 
   return moves;
+}
+
+/** Filter moves to exclude those that result in the player's king being in check */
+export function legalMoves(
+  piece: Piece,
+  square: Square,
+  board: Board,
+): Moves {
+  const moves = pieceMoves(piece, square, board);
+  return moves.filter((move) => {
+    // Simulate the move on a new board
+    const newBoard = board.move(move[0], move[1]);
+
+    // The move is legal if the player is not in check on the new board
+    const inCheck = isCheck(piece.color, newBoard);
+
+    return !inCheck;
+  });
 }

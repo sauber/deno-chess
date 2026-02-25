@@ -8,13 +8,18 @@ export type File = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h";
 /** A single square on a chess board */
 export class Square {
   /** Option piece on the square */
-  public piece?: Piece;
-  public color: Color;
+  public readonly piece?: Piece;
+  public readonly color: Color;
   public readonly name: string;
 
-  constructor(public readonly rank: Rank, public readonly file: File) {
+  constructor(
+    public readonly rank: Rank,
+    public readonly file: File,
+    piece?: Piece,
+  ) {
     this.color = Square.getColor(rank, file);
     this.name = `${this.file}${this.rank}`;
+    this.piece = piece;
   }
 
   /** Decide color of square based on name */

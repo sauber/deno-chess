@@ -9,7 +9,7 @@ export class Game {
   public moves = 0;
 
   constructor(
-    private readonly board: Board,
+    private board: Board,
     private readonly player1: Player,
     private readonly player2: Player,
   ) {}
@@ -39,7 +39,7 @@ export class Game {
 
     this.moves++;
     this.displayMove(player, move[0].piece!, move);
-    this.board.move(move[0], move[1]);
+    this.board = this.board.move(move[0], move[1]);
     return true;
   }
 

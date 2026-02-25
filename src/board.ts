@@ -1,5 +1,5 @@
 import { type File, type Rank, Square } from "./square.ts";
-import type { Color, Vector } from "./rules.ts";
+import type { Color, Piece, Vector } from "./rules.ts";
 import type { Move } from "./moves.ts";
 
 type Grid = Square[][];
@@ -9,8 +9,9 @@ export class Board {
   private readonly grid: Grid;
   private latest: Move | undefined;
 
-  constructor() {
-    this.grid = Board.makegrid();
+  constructor(grid?: Grid, latest?: Move) {
+    this.grid = grid ?? Board.makegrid();
+    this.latest = latest;
   }
 
   /** Get square at position */
@@ -102,10 +103,36 @@ export class Board {
     return grid;
   }
 
-  /** Move a piece from one square to another. Piece on target square may be captured and removed from the board. */
-  public move(source: Square, target: Square): void {
-    target.piece = source.piece;
-    source.piece = undefined;
-    this.latest = [source, target];
+  /**
+   * Places a piece on a square, returning a new Board.
+   * This is useful for setting up a board.
+   */
+  public place(piece: Piece, file: File, rank: Rank): Board {
+    const newGrid = this.grid.map((row) => row.slice());
+    const newSquare = new Square(rank, file, piece);
+
+    newGrid[rank - 1][file.charCodeAt(0) - "a".charCodeAt(0)] = newSquare;
+
+    return new Board(newGrid, this.latest);
+  }
+
+  /**
+   * Move a piece from one square to another. Returns a new board with the move applied.
+   * Piece on target square may be captured and removed from the board.
+   */
+  public move(source: Square, target: Square): Board {
+    const newGrid = this.grid.map((row) => row.slice());
+
+    const newSource = new Square(source.rank, source.file, undefined);
+    const newTarget = new Square(target.rank, target.file, source.piece);
+
+    newGrid[source.rank - 1][source.file.charCodeAt(0) - "a".charCodeAt(0)] =
+      newSource;
+    newGrid[target.rank - 1][target.file.charCodeAt(0) - "a".charCodeAt(0)] =
+      newTarget;
+
+    const newLatest: Move = [newSource, newTarget];
+
+    return new Board(newGrid, newLatest);
   }
 }
