@@ -6,12 +6,10 @@ type Grid = Square[][];
 
 /** A chess board of squares */
 export class Board {
-  private readonly grid: Grid;
-  private latest: Move | undefined;
-
-  constructor(grid?: Grid, latest?: Move) {
-    this.grid = grid ?? Board.makegrid();
-    this.latest = latest;
+  constructor(
+    public readonly grid: Grid = Board.makegrid(),
+    public readonly latest?: Move,
+  ) {
   }
 
   /** Get square at position */

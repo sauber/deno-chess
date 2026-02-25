@@ -3,43 +3,44 @@ import type { Move } from "./moves.ts";
 import type { Player } from "./player.ts";
 import type { Piece } from "./rules.ts";
 
+export interface MoveHistoryEntry {
+  player: Player;
+  piece: Piece;
+  move: Move;
+  capturedPiece?: Piece;
+}
+
 /** Run a game where player takes turn moving a piece until one player is defeated */
 export class Game {
-  // Number of moves played
-  public moves = 0;
+  /** Journal of moves */
+  public readonly history: MoveHistoryEntry[] = [];
+
+  /** Number of moves played  */
+  public get moves(): number {
+    return this.history.length;
+  }
 
   constructor(
-    private board: Board,
-    private readonly player1: Player,
-    private readonly player2: Player,
+    public board: Board,
+    public readonly player1: Player,
+    public readonly player2: Player,
   ) {}
-
-  private displayMove(
-    player: Player,
-    piece: Piece,
-    move: Move,
-  ): void {
-    const [source, target] = move;
-    console.log(
-      "#",
-      this.moves,
-      player.color,
-      "moves",
-      piece.name,
-      source.name,
-      "->",
-      target.name,
-    );
-  }
 
   // Make a move for one player
   private move(player: Player): boolean {
     const move: Move | undefined = player.move(this.board);
     if (!move) return false;
 
-    this.moves++;
-    this.displayMove(player, move[0].piece!, move);
-    this.board = this.board.move(move[0], move[1]);
+    const [source, target] = move;
+    const movedPiece = source.piece!;
+    const capturedPiece = target.piece;
+    this.history.push({
+      player,
+      piece: movedPiece,
+      move,
+      capturedPiece,
+    });
+    this.board = this.board.move(source, target);
     return true;
   }
 
