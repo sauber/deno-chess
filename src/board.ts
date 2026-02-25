@@ -1,19 +1,32 @@
 import { type File, type Rank, Square } from "./square.ts";
-import type { Vector } from "./rules.ts";
+import type { Color, Vector } from "./rules.ts";
+import type { Move } from "./moves.ts";
 
 type Grid = Square[][];
 
 /** A chess board of squares */
 export class Board {
   private readonly grid: Grid;
+  private latest: Move | undefined;
 
   constructor() {
     this.grid = Board.makegrid();
   }
 
   /** Get square at position */
-  public get(file: File, rank: Rank): Square {
+  public square(file: File, rank: Rank): Square {
     return this.grid[rank - 1][file.charCodeAt(0) - "a".charCodeAt(0)];
+  }
+
+  /** List of all square having a piece of matching color */
+  public pieces(color: Color): Square[] {
+    const squares: Square[] = [];
+    for (const row of this.grid) {
+      for (const square of row) {
+        if (square.piece && square.piece.color === color) squares.push(square);
+      }
+    }
+    return squares;
   }
 
   /** Render the board as a string for display on an ansi terminal */
@@ -23,8 +36,19 @@ export class Board {
       str += `${i + 1} `;
       for (const square of this.grid[i]) {
         const piece = square.piece ? square.piece.symbol : " ";
-        const bg = square.color === "white" ? "\x1b[47m" : "\x1b[44m";
-        const fg = square.color === "white" ? "\x1b[30m" : "\x1b[37m";
+        const isLatest = this.latest &&
+          (this.latest[0] === square || this.latest[1] === square);
+        let bg;
+        if (isLatest) {
+          // Accented colors for the latest move
+          bg = square.color === "white"
+            ? "\x1b[48;5;228m" // Light Yellow
+            : "\x1b[48;5;130m"; // Dark Orange
+        } else {
+          bg = square.color === "white" ? "\x1b[48;5;230m" : "\x1b[48;5;94m";
+        }
+        const fg = square.piece?.color === "white" ? "\x1b[30m" : "\x1b[37m";
+        // const fg = "";
         str += `${bg}${fg} ${piece} \x1b[0m`;
       }
       str += "\n";
@@ -76,5 +100,12 @@ export class Board {
       grid.push(row);
     }
     return grid;
+  }
+
+  /** Move a piece from one square to another. Piece on target square may be captured and removed from the board. */
+  public move(source: Square, target: Square): void {
+    target.piece = source.piece;
+    source.piece = undefined;
+    this.latest = [source, target];
   }
 }

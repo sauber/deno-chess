@@ -33,7 +33,8 @@ export type Piece = {
 
 export const BlackKing: Piece = {
   name: "king",
-  symbol: "♔",
+  // symbol: "♔",
+  symbol: "♚",
   color: "black",
   movements: [
     [-1, -1],
@@ -48,19 +49,7 @@ export const BlackKing: Piece = {
   recursive: false,
 };
 
-export const WhiteKing: Piece = {
-  name: "king",
-  symbol: "♚",
+export const WhiteKing: Piece = Object.assign({}, BlackKing, {
   color: "white",
-  movements: [
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-    [0, -1],
-    [0, 1],
-    [1, -1],
-    [1, 0],
-    [1, 1],
-  ],
-  recursive: false,
-};
+  symbol: "♚",
+});

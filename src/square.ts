@@ -10,9 +10,11 @@ export class Square {
   /** Option piece on the square */
   public piece?: Piece;
   public color: Color;
+  public readonly name: string;
 
   constructor(public readonly rank: Rank, public readonly file: File) {
     this.color = Square.getColor(rank, file);
+    this.name = `${this.file}${this.rank}`;
   }
 
   /** Decide color of square based on name */
