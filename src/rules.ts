@@ -25,6 +25,8 @@ export type Piece = {
   symbol: Symbol;
   // Which color is piece
   color: Color;
+  // Value of piece
+  value: number;
   // Valid moves
   movements: Movements;
   // Step movement or runner over contigues sqares
@@ -36,6 +38,7 @@ export const BlackKing: Piece = {
   // symbol: "♔",
   symbol: "♚",
   color: "black",
+  value: 0,
   movements: [
     [-1, -1],
     [-1, 0],

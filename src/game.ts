@@ -10,21 +10,30 @@ export interface MoveHistoryEntry {
   capturedPiece?: Piece;
 }
 
+/** Callback after each move */
+export type Status = (game: Game) => Promise<void>;
+
 /** Run a game where player takes turn moving a piece until one player is defeated */
 export class Game {
   /** Journal of moves */
   public readonly history: MoveHistoryEntry[] = [];
 
-  /** Number of moves played  */
-  public get moves(): number {
-    return this.history.length;
-  }
+  // Max number of moves
+  public readonly max: number = 1000;
+
+  // Callback functiom after each move
+  public readonly status: Status = (): Promise<void> => {
+    return Promise.resolve();
+  };
 
   constructor(
     public board: Board,
     public readonly player1: Player,
     public readonly player2: Player,
-  ) {}
+    options: Partial<Game> = {},
+  ) {
+    Object.assign(this, options);
+  }
 
   // Make a move for one player
   private move(player: Player): boolean {
@@ -44,12 +53,17 @@ export class Game {
     return true;
   }
 
+  /** Number of moves played  */
+  public get moves(): number {
+    return this.history.length;
+  }
+
   /** Start game and run until end */
-  public play(max: number = 100): void {
-    while (this.moves < max) {
+  public async play(): Promise<void> {
+    while (this.moves < this.max) {
       const player = this.moves % 2 === 1 ? this.player2 : this.player1;
       if (!this.move(player)) break;
-      // else console.log(this.board.toString());
+      await this.status(this);
     }
   }
 }

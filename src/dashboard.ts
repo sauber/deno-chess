@@ -1,5 +1,5 @@
 import type { Board } from "./board.ts";
-import { Game } from "./game.ts";
+import type { Game } from "./game.ts";
 import type { Move } from "./moves.ts";
 import type { Player } from "./player.ts";
 import type { Piece } from "./rules.ts";
@@ -32,10 +32,11 @@ export function renderBoard(board: Board): string {
   return str;
 }
 
-/** Display statics from board such as:
+/** Display statistics from board such as:
  * List of captured pieces
  * Names of player policies
  * Number of moves since start
+ * For each player sum of values for remaining pieces on board
  */
 export function renderGameStats(game: Game): string {
   // const whiteCaptured = game.board.whiteCaptured.map((p) => p.symbol).join(" ");
@@ -69,4 +70,25 @@ export function displayMove(
     "->",
     target.name,
   );
+}
+
+/** Show game status. Side by side display:
+ * To the left show board.
+ * To the righ show games stats
+ */
+export function displayGame(game: Game): string {
+  const stats = renderGameStats(game);
+  const board = renderBoard(game.board);
+  console.clear();
+
+  // Render board and stats side by side
+  const boardLines: string[] = board.split("\n");
+  const statsLines: string[] = stats.split("\n");
+  const joined = [];
+  for (let i = 0; i < Math.max(boardLines.length, statsLines.length); i++) {
+    const boardLine = boardLines[i] || "";
+    const statsLine = statsLines[i] || "";
+    joined.push(`${boardLine}  ${statsLine}`);
+  }
+  return joined.join("\n");
 }

@@ -74,7 +74,7 @@ export function playerMoves(color: Color, board: Board): Moves {
   const moves: Move[] = [];
   for (const square of squares) {
     if (square.piece) {
-      moves.push(...pieceMoves(square.piece, square, board));
+      moves.push(...legalMoves(square.piece, square, board));
     }
   }
 

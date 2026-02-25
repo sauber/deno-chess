@@ -22,9 +22,9 @@ Deno.test("Instance of a game", () => {
   assertInstanceOf(game, Game);
 });
 
-Deno.test("Play game", () => {
-  const game = new Game(board, p1, p2);
+Deno.test("Play game", async () => {
   const rounds = 5;
-  game.play(rounds);
+  const game = new Game(board, p1, p2, { max: rounds });
+  await game.play();
   assertLessOrEqual(game.moves, rounds);
 });
