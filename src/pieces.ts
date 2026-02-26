@@ -31,9 +31,18 @@ export class Pieces {
 
   /** Index of piece on square */
   private findIndexOf(square: Square): number {
-    return this.positions.findIndex((p) =>
+    const index = this.positions.findIndex((p) =>
       p.file === square.file && p.rank === square.rank
     );
+    // console.log(
+    //   `Board findIndexOf ${index} source (${square.file}, ${square.rank})`,
+    // );
+    // if (index === -1) {
+    //   console.log(
+    //     this.positions.map((p) => `${p.piece.name} ${p.file}, ${p.rank}`),
+    //   );
+    // }
+    return index;
   }
 
   /** Piece at position, if any */
@@ -73,9 +82,18 @@ export class Pieces {
 
   /** Move a piece to another square */
   public move(source: Square, target: Square): Pieces {
+    // console.log(
+    //   `Pieces move source (${source.file}, ${source.rank}) -> (${target.file}, ${target.rank})`,
+    // );
     const index = this.findIndexOf(source);
     if (index === -1) throw new Error("No piece at position");
-    const newPositions = [...this.positions];
+    const newPositions: Position[] = [
+      ...this.positions.map((p) => ({
+        piece: p.piece,
+        file: p.file,
+        rank: p.rank,
+      })),
+    ];
     newPositions[index].file = target.file;
     newPositions[index].rank = target.rank;
     return new Pieces(newPositions);

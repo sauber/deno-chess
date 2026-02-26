@@ -2,6 +2,7 @@
 import type { File, Piece, Rank, Square, Vector } from "./rules.ts";
 import type { Move } from "./moves.ts";
 import type { Pieces } from "./pieces.ts";
+import { log } from "node:console";
 
 // 2D array of squares
 // type Grid = Square[][];
@@ -79,7 +80,7 @@ export class Board {
     if (file < 0 || file > 7) return undefined;
 
     const rank = square.rank + offset.rank;
-    if (rank < 1 || rank > 8) return undefined;
+    if (rank < 0 || rank > 7) return undefined;
 
     return { file: file as File, rank: rank as Rank };
   }
@@ -100,11 +101,29 @@ export class Board {
     const newOther = other.piece(target) ? other.capture(target) : other;
 
     // Move piece in set
+    // console.log(
+    //   `Board move source (${source.file}, ${source.rank}) -> (${target.file}, ${target.rank})`,
+    // );
+    // console.log(
+    //   "Set:",
+    //   set.all.map((p) => `${p.piece.name} ${p.file}, ${p.rank}`),
+    // );
     const newSet = set.move(source, target);
+    // Compare location of pieces in set and newSet
+    // console.log(
+    //   "Set:",
+    //   set.all.map((p) => `${p.piece.name} ${p.file}, ${p.rank}`),
+    // );
+    // console.log(
+    //   "newSet:",
+    //   newSet.all.map((p) => `${p.piece.name} ${p.file}, ${p.rank}`),
+    // );
 
     const [white, black] = piece.color === "white"
       ? [newSet, newOther]
       : [newOther, newSet];
+
+    // console.warn("First board move");
 
     return new Board(white, black, move);
   }

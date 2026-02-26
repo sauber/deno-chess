@@ -19,8 +19,8 @@ Deno.test("Instance", () => {
   // Let player move a piece
   const player = new Player("white", RandomPolicy);
   const move: Move | undefined = player.move(board);
-  const newBoard = move ? board.move(move) : board;
+  // const newBoard = move ? board.move(move) : board;
 
   // Display updated board
-  console.log(renderBoard(newBoard));
+  // console.log(renderBoard(newBoard));
 });

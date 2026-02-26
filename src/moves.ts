@@ -83,6 +83,7 @@ export function pieceMoves(
 
 /** All valid moves for a player */
 export function playerMoves(color: Color, board: Board): Moves {
+  // console.log("playerMoves scan", color);
   // Find pieces on squares belonging to player
   // const squares: Square[] = board.pieces(color);
   const pieces: Pieces = color === "white" ? board.white : board.black;
@@ -93,6 +94,7 @@ export function playerMoves(color: Color, board: Board): Moves {
     const square: Square = { file: position.file, rank: position.rank };
     moves.push(...legalMoves(position.piece, square, board));
   }
+  // console.log("playerMoves moves", moves.length);
 
   return moves;
 }
@@ -104,7 +106,11 @@ export function legalMoves(
   board: Board,
 ): Moves {
   const moves = pieceMoves(piece, square, board);
-  return moves.filter((move) => {
+  // console.log("legalMoves found pieceMoves before filtering: ", moves.length);
+  const legal: Moves = moves.filter((move) => {
+    // console.log(
+    //   `Testing move ${move.source.piece.name} ${move.source.file}, ${move.source.rank} -> ${move.target.file}, ${move.target.rank}`,
+    // );
     // Simulate the move on a new board
     const newBoard = board.move(move);
 
@@ -113,4 +119,7 @@ export function legalMoves(
 
     return !inCheck;
   });
+
+  // console.log("legalMoves found pieceMoves after filtering: ", legal.length);
+  return legal;
 }

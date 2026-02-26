@@ -11,7 +11,6 @@ Deno.test("Bottom Right", () => {
   );
   const square: Square = { file: 0, rank: 0 };
   const moves: Moves = pieceMoves(WhiteKing, square, board);
-  console.log(moves);
   assertEquals(moves.length, 3);
 });
 
