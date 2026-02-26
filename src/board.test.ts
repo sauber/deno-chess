@@ -1,36 +1,15 @@
 import { assertEquals } from "@std/assert";
 import { Board } from "./board.ts";
+// import { renderBoard } from "./dashboard.ts";
 import { BlackKing, WhiteKing } from "./rules.ts";
-import type { Square } from "./square.ts";
+import { Pieces } from "./pieces.ts";
+
+const white = new Pieces([{ file: 0, rank: 0, piece: WhiteKing }]);
+const black = new Pieces([{ file: 0, rank: 0, piece: BlackKing }]);
 
 Deno.test("Instance", () => {
-  const board = new Board();
-  console.log(board.toString());
-});
-
-Deno.test("Square", () => {
-  const board = new Board();
-  const square: Square = board.square("a", 1);
-  console.log(square.toString());
-});
-
-Deno.test("Pieces", () => {
-  const board = new Board();
-
-  // Place white pieces
-  const boardWithWhite = board
-    .place(WhiteKing, "a", 1)
-    .place(WhiteKing, "h", 1);
-
-  const squares = boardWithWhite.pieces("white");
-  assertEquals(squares.length, 2);
-  assertEquals(squares[0].piece?.name, "king");
-
-  // Place black pieces
-  const finalBoard = boardWithWhite.place(BlackKing, "a", 8).place(
-    BlackKing,
-    "h",
-    8,
-  );
-  console.log(finalBoard.toString());
+  const board = new Board(white, black);
+  assertEquals(board.white.length, 1);
+  assertEquals(board.black.length, 1);
+  // console.log(renderBoard(board));
 });

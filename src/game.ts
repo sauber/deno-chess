@@ -40,16 +40,16 @@ export class Game {
     const move: Move | undefined = player.move(this.board);
     if (!move) return false;
 
-    const [source, target] = move;
+    const { source, target } = move;
     const movedPiece = source.piece!;
-    const capturedPiece = target.piece;
+    const capturedPiece = this.board.piece(target);
     this.history.push({
       player,
       piece: movedPiece,
       move,
       capturedPiece,
     });
-    this.board = this.board.move(source, target);
+    this.board = this.board.move(move);
     return true;
   }
 

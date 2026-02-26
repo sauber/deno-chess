@@ -4,13 +4,13 @@ import { Player } from "./player.ts";
 import { assertInstanceOf, assertLessOrEqual } from "@std/assert";
 import { BlackKing, WhiteKing } from "./rules.ts";
 import { RandomPolicy } from "./policy.ts";
+import { Pieces } from "./pieces.ts";
 
 // A board with kings placed in corners
-const board = new Board()
-  .place(WhiteKing, "a", 1)
-  .place(WhiteKing, "h", 1)
-  .place(BlackKing, "a", 8)
-  .place(BlackKing, "h", 8);
+const board = new Board(
+  new Pieces([{ file: 0, rank: 0, piece: WhiteKing }]),
+  new Pieces([{ file: 7, rank: 7, piece: BlackKing }]),
+);
 
 // Players with random policy
 const p1 = new Player("white", RandomPolicy);

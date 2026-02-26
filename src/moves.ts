@@ -1,21 +1,24 @@
 import type { Board } from "./board.ts";
 import { isCheck } from "./check.ts";
-import type { Color, Piece, Vector } from "./rules.ts";
-import type { Square } from "./square.ts";
+import type { Pieces, Position } from "./pieces.ts";
+import type { Color, Piece, Square, Vector } from "./rules.ts";
 
 // A move is from one square to another
-export type Move = [Square, Square];
+export type Move = { source: Position; target: Square };
 export type Moves = Move[];
 
-/** Can piece move to target square */
-function canMove(piece: Piece, target: Square): boolean {
-  if (target.piece) {
-    // Can capture if piece is of other color
-    if (target.piece.color !== piece.color) return true;
-    // Cannot move if piece is of same color
-    else return false;
-  } // Can move if there are no other pieces
-  else return true;
+/** Can piece move to target square on board */
+function canMove(piece: Piece, target: Square, board: Board): boolean {
+  const other: Piece | undefined = board.piece(target);
+
+  // Can move to empty square
+  if (!other) return true;
+
+  // Can move to square having piece of other color (and capture it)
+  if (other.color !== piece.color) return true;
+
+  // Cannot move to square having piece with same color
+  return false;
 }
 
 /** Examine one step in one direction */
@@ -26,8 +29,21 @@ function step(
   board: Board,
 ): Move | undefined {
   const target: Square | undefined = board.target(square, vector);
-  if (target && canMove(piece, target)) return [square, target];
-  else return undefined;
+
+  // Cannot move outside board
+  if (!target) return undefined;
+
+  // Can move to target square
+  if (canMove(piece, target, board)) {
+    const move: Move = {
+      source: { file: square.file, rank: square.rank, piece },
+      target,
+    };
+    return move;
+  }
+
+  // Cannot move to square
+  return undefined;
 }
 
 /** Recursive steps in same direction */
@@ -42,8 +58,8 @@ function recursive(
   while (move) {
     moves.push(move);
     // Stop if there is a piece on target square
-    if (move[1].piece) move = undefined;
-    else move = step(piece, move[1], vector, board);
+    if (board.piece(move.target)) move = undefined;
+    else move = step(piece, move.target, vector, board);
   }
   return moves;
 }
@@ -68,14 +84,14 @@ export function pieceMoves(
 /** All valid moves for a player */
 export function playerMoves(color: Color, board: Board): Moves {
   // Find pieces on squares belonging to player
-  const squares: Square[] = board.pieces(color);
+  // const squares: Square[] = board.pieces(color);
+  const pieces: Pieces = color === "white" ? board.white : board.black;
 
   // List of all possible moves for player
   const moves: Move[] = [];
-  for (const square of squares) {
-    if (square.piece) {
-      moves.push(...legalMoves(square.piece, square, board));
-    }
+  for (const position of pieces.all) {
+    const square: Square = { file: position.file, rank: position.rank };
+    moves.push(...legalMoves(position.piece, square, board));
   }
 
   return moves;
@@ -90,7 +106,7 @@ export function legalMoves(
   const moves = pieceMoves(piece, square, board);
   return moves.filter((move) => {
     // Simulate the move on a new board
-    const newBoard = board.move(move[0], move[1]);
+    const newBoard = board.move(move);
 
     // The move is legal if the player is not in check on the new board
     const inCheck = isCheck(piece.color, newBoard);

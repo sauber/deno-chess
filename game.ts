@@ -4,14 +4,13 @@ import { Player } from "./src/player.ts";
 import { RandomPolicy } from "./src/policy.ts";
 import { BlackKing, WhiteKing } from "./src/rules.ts";
 import { displayGame } from "./src/dashboard.ts";
+import { Pieces } from "./src/pieces.ts";
 
 // Create a board with kings in each corner
-const board = new Board()
-  .place(WhiteKing, "a", 1)
-  .place(WhiteKing, "h", 1)
-  .place(BlackKing, "a", 8)
-  .place(BlackKing, "h", 8);
-
+const board = new Board(
+  new Pieces([{ file: 0, rank: 0, piece: WhiteKing }]),
+  new Pieces([{ file: 7, rank: 7, piece: BlackKing }]),
+);
 // Create two players
 const player1 = new Player("white", RandomPolicy);
 const player2 = new Player("black", RandomPolicy);
