@@ -12,9 +12,7 @@ export interface Policy {
 export const RandomPolicy: Policy = {
   name: "Random",
   move: (color: Color, board: Board): Move | undefined => {
-    // console.log(`Policy ${color}`);
     const moves: Move[] = playerMoves(color, board);
-    // console.log("Policy moves count", moves.length);
     if (moves.length === 0) return undefined;
     const randomMove: Move = moves[Math.floor(Math.random() * moves.length)];
     return randomMove;

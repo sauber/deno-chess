@@ -15,9 +15,6 @@ export class Player {
   public move(board: Board): Move | undefined {
     // Pick best by player policy
     const best: Move | undefined = this.policy.move(this.color, board);
-    // console.log(
-    //   `Player move ${best?.source.piece.name} ${best?.source.file}, ${best?.source.rank} -> ${best?.target.file}, ${best?.target.rank}`,
-    // );
     return best;
   }
 }

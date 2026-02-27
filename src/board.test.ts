@@ -11,5 +11,4 @@ Deno.test("Instance", () => {
   const board = new Board(white, black);
   assertEquals(board.white.length, 1);
   assertEquals(board.black.length, 1);
-  // console.log(renderBoard(board));
 });
