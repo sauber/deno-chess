@@ -13,12 +13,12 @@ const pieceMap: { [key: string]: PieceInfo } = {
   "b": { symbol: "♝", color: "black" },
   "q": { symbol: "♛", color: "black" },
   "k": { symbol: "♚", color: "black" },
-  "P": { symbol: "♟", color: "white" },
-  "R": { symbol: "♜", color: "white" },
-  "N": { symbol: "♞", color: "white" },
-  "B": { symbol: "♝", color: "white" },
-  "Q": { symbol: "♛", color: "white" },
-  "K": { symbol: "♚", color: "white" },
+  "P": { symbol: "♙", color: "white" },
+  "R": { symbol: "♖", color: "white" },
+  "N": { symbol: "♘", color: "white" },
+  "B": { symbol: "♗", color: "white" },
+  "Q": { symbol: "♕", color: "white" },
+  "K": { symbol: "♔", color: "white" },
 };
 
 /** Given a FEN string, render chess board in ANSI color using UTF8 chess symbols */
@@ -47,34 +47,18 @@ export function ansiBoard(fen: string): string {
     }
   }
 
-  const RESET = "\x1b[0m";
-  // const FG_BLACK = "\x1b[38;5;0m";
-  // const FG_WHITE = "\x1b[38;5;15m";
-  const FG_BLACK = "\x1b[94m";
-  const FG_WHITE = "\x1b[91m";
-  const BG_LIGHT_SQUARE = "\x1b[48;5;223m"; // Beige background
-  const BG_DARK_SQUARE = "\x1b[48;5;94m"; // Dark brown background
-  // const FG_BLACK = "\x1b[38;5;3m";
-  // const FG_WHITE = "\x1b[38;5;15m";
-  // const BG_LIGHT_SQUARE = "\x1b[48;5;2m"; // Beige background
-  // const BG_DARK_SQUARE = "\x1b[48;5;6m"; // Dark brown background
-
   let output = "";
   for (let rankIndex = 7; rankIndex >= 0; rankIndex--) {
     output += `${rankIndex + 1} `;
     for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
       const pieceInfo = board[rankIndex][fileIndex];
       const isLightSquare = (rankIndex + fileIndex) % 2 !== 0;
-      const bg = isLightSquare ? BG_LIGHT_SQUARE : BG_DARK_SQUARE;
+      const fill = isLightSquare ? "█" : "░";
       const pieceSymbol = pieceInfo ? pieceInfo.symbol : " ";
-      let symbol = "   ";
-      if (pieceInfo) {
-        const fg = pieceInfo.color === "white" ? FG_WHITE : FG_BLACK;
-        symbol = `${fg} ${pieceSymbol} `;
-      }
-      output += `${bg}${symbol}`;
+      const square = pieceInfo ? ` ${pieceSymbol} ` : fill.repeat(3);
+      output += square;
     }
-    output += RESET + "\n";
+    output += "\n";
   }
   output += "   a  b  c  d  e  f  g  h \n";
   return output;
