@@ -21,13 +21,27 @@ const pieceMap: { [key: string]: PieceInfo } = {
   "K": { symbol: "♔", color: "white" },
 };
 
-/** Given a FEN string, render chess board in ANSI color using UTF8 chess symbols */
-export function ansiBoard(fen: string): string {
+const HIGHLICGHT_COLOR = "\x1b[48;5;130m";
+const CHECK_COLOR = "\x1b[48;5;1m";
+const RESET_COLOR = "\x1b[0m";
+
+/** Given a FEN string, render chess board in ANSI color using UTF8 chess symbols
+ * @param fen FEN encoded string of positions
+ * @param highlight List of square names to highlight as recently moved
+ * @param atatck List of square names to highlight as being in check
+ */
+export function ansiBoard(
+  fen: string,
+  highlight: string[] = [],
+  attack: string[] = [],
+): string {
+  // Blank board
   const fenBoard = fen.split(" ")[0];
   const board: (PieceInfo | null)[][] = Array(8).fill(null).map(() =>
     Array(8).fill(null)
   );
 
+  // Place pieces
   const ranks = fenBoard.split("/");
   for (let i = 0; i < ranks.length; i++) {
     const rankStr = ranks[i];
@@ -51,15 +65,24 @@ export function ansiBoard(fen: string): string {
   for (let rankIndex = 7; rankIndex >= 0; rankIndex--) {
     output += `${rankIndex + 1} `;
     for (let fileIndex = 0; fileIndex < 8; fileIndex++) {
-      const pieceInfo = board[rankIndex][fileIndex];
-      const isLightSquare = (rankIndex + fileIndex) % 2 !== 0;
-      const fill = isLightSquare ? "█" : "░";
-      const pieceSymbol = pieceInfo ? pieceInfo.symbol : " ";
-      const square = pieceInfo ? ` ${pieceSymbol} ` : fill.repeat(3);
-      output += square;
+      const squarename: string = String.fromCharCode(97 + fileIndex) +
+        (rankIndex + 1);
+      const isHighlight: boolean = highlight.includes(squarename);
+      const isAttack: boolean = attack.includes(squarename);
+      const pieceInfo: PieceInfo | null = board[rankIndex][fileIndex];
+      const isLightSquare: boolean = (rankIndex + fileIndex) % 2 !== 0;
+      const fill: string = isLightSquare ? " " : "░";
+      const pieceSymbol: string = pieceInfo ? pieceInfo.symbol : " ";
+      const chars: string = pieceInfo ? ` ${pieceSymbol} ` : fill.repeat(3);
+      const [bg, reset] = isAttack
+        ? [CHECK_COLOR, RESET_COLOR]
+        : isHighlight
+        ? [HIGHLICGHT_COLOR, RESET_COLOR]
+        : ["", ""];
+      output += bg + chars + reset;
     }
     output += "\n";
   }
-  output += "   a  b  c  d  e  f  g  h \n";
+  output += "   a  b  c  d  e  f  g  h ";
   return output;
 }

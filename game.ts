@@ -1,4 +1,4 @@
-import { Chess } from "chess.js";
+import { Chess, KING, type Square } from "chess.js";
 import { ansiBoard } from "./src/ansi-board.ts";
 
 const chess = new Chess();
@@ -8,16 +8,35 @@ const CLEAR_LINE = "\x1b[K";
 console.log(HIDE_CURSOR);
 
 while (!chess.isGameOver() && chess.history().length < 500) {
-  const moves = chess.moves();
+  // Wait between moves
+  await new Promise((resolve) => setTimeout(resolve, 150));
+
+  const moves = chess.moves({ verbose: true });
   const move = moves[Math.floor(Math.random() * moves.length)];
   chess.move(move);
+
+  // After move, the turn color in check?
+  const attack: string[] = [];
+  if (chess.inCheck()) {
+    // On which square is king located
+    const kingSquare: Square =
+      chess.findPiece({ type: KING, color: chess.turn() })[0];
+    attack.push(kingSquare);
+
+    // On which squares are attacking pieces located
+    const other = chess.turn() === "w" ? "b" : "w";
+    const attackers = chess.attackers(kingSquare, other);
+    attack.push(...attackers);
+  }
+
   // If not the first move, move up curser 9 lines
   if (chess.history().length > 1) {
-    console.log("\x1b[12A");
+    console.log("\x1b[11A");
   }
-  // console.log(chess.ascii());
+
+  // Render board
   const fen = chess.fen();
-  const board = ansiBoard(fen).split("\n");
+  const board = ansiBoard(fen, [move.from, move.to], attack).split("\n");
 
   const status = [
     "Moves:" + chess.moves().length,
@@ -38,23 +57,6 @@ while (!chess.isGameOver() && chess.history().length < 500) {
 
   console.log("Moves: " + chess.history().length);
   console.log(output);
+  // if (chess.inCheck()) Deno.exit(0);
 }
 console.log(SHOW_CURSOR);
-
-// console.log(chess.pgn());
-
-// const RESET = "\x1b[0m";
-// const FG_BLACK = "\x1b[38;5;0m";
-// // const FG_WHITE = "\x1b[38;5;15m";
-// const FG_WHITE = "\x1b[38;2;255;255;255m";
-// // const BG_LIGHT_SQUARE = "\x1b[48;5;223m"; // Beige background
-// const BG_LIGHT_SQUARE = "\x1b[48;5;217m"; // Beige background
-// const BG_DARK_SQUARE = "\x1b[48;5;94m"; // Dark brown background
-
-// let output = `${BG_LIGHT_SQUARE}${FG_BLACK}X${RESET}\n`;
-// output += `${BG_DARK_SQUARE}${FG_BLACK}X${RESET}\n`;
-// output += `${BG_LIGHT_SQUARE}${FG_WHITE}X${RESET}\n`;
-// output += `${BG_DARK_SQUARE}${FG_WHITE}X${RESET}\n`;
-
-// console.log(output);
-// console.log("\x1b[38;2;255;82;197;48;2;155;106;0mHello" + RESET);
