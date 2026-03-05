@@ -25,10 +25,10 @@ export function gameStats(chess: Chess, white: Player, black: Player): string {
       : null;
     if (winner) reason = winner.name + " won";
     else {
+      if (chess.isThreefoldRepetition()) reason = "Threefold Repetition";
+      if (chess.isInsufficientMaterial()) reason = "Insufficient Material";
       if (chess.isStalemate()) reason = "Stalemate";
       if (chess.isDrawByFiftyMoves()) reason = "Draw By 50 Moves";
-      if (chess.isInsufficientMaterial()) reason = "Insufficient Material";
-      if (chess.isThreefoldRepetition()) reason = "Threefold Repetition";
     }
   }
 
