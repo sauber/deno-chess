@@ -1,5 +1,5 @@
 import { ansiBoard } from "./ansi-board.ts";
-import { Init } from "./types.ts";
+import { Init } from "./setup.ts";
 
 Deno.test("Standard Initial Setup", () => {
   // const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

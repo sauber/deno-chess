@@ -1,10 +1,25 @@
-import type { Color } from "./types.ts";
-import type { Symbol } from "./piece.ts";
+/** Valid colors */
+type Color = "white" | "black";
 
-interface PieceInfo {
+/** Valid symbols for pieces */
+type Symbol =
+  | "♔"
+  | "♕"
+  | "♖"
+  | "♗"
+  | "♘"
+  | "♙"
+  | "♚"
+  | "♛"
+  | "♜"
+  | "♝"
+  | "♞"
+  | "♟";
+
+type PieceInfo = {
   symbol: Symbol;
   color: Color;
-}
+};
 
 const pieceMap: { [key: string]: PieceInfo } = {
   "p": { symbol: "♟", color: "black" },
