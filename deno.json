@@ -3,12 +3,8 @@
   "version": "0.1.0",
   "exports": "./mod.ts",
   "imports": {
-<<<<<<< HEAD
-    "@std/assert": "jsr:@std/assert@^1.0.19"
-=======
-    "@std/assert": "jsr:@std/assert@^1.0.6",
+    "@std/assert": "jsr:@std/assert@^1.0.19",
     "chess.js": "npm:chess.js@^1.4.0"
->>>>>>> chesslib
   },
   "lock": false,
   "publish": {
