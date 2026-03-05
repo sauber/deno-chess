@@ -16,11 +16,19 @@ type SquarePiece = { square: Square; type: PieceSymbol; color: Color };
 type Board = (SquarePiece | null)[][];
 
 /** Convert square name, such as a1, n8 etc. to Index */
-export function nameToIndex(square: string): Index {
+export function nameToIndex(square: Square): Index {
   const [file, rank] = square.split("");
   const fileIndex: FileIndex = file.charCodeAt(0) - 97;
   const rankIndex: RankIndex = 8 - parseInt(rank, 10);
   return [rankIndex, fileIndex];
+}
+
+/** Convert board Index to square name  */
+export function indexToName(index: Index): Square {
+  const [RankIndex, FileIndex] = index;
+  const rank = 8 - RankIndex;
+  const file = String.fromCharCode(97 + FileIndex);
+  return file + rank as Square;
 }
 
 /** Square indeces of pieces of matching color */

@@ -8,6 +8,9 @@ import { Last } from "./src/bot/last.ts";
 import { Hunt } from "./src/bot/hunt.ts";
 import { Flee } from "./src/bot/flee.ts";
 import { Middle } from "./src/bot/middle.ts";
+import { Capture } from "./src/bot/capture.ts";
+import { Center } from "./src/bot/center.ts";
+import { Edge } from "./src/bot/edge.ts";
 
 // Dashboard callback
 let height: number;
@@ -29,6 +32,9 @@ const allPlayers: Player[] = [
   new Last(),
   new Hunt(),
   new Flee(),
+  new Capture(),
+  new Center(),
+  new Edge(),
 ];
 const [black, white] = allPlayers.sort(() => Math.random() - 0.5);
 
