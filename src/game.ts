@@ -1,8 +1,8 @@
 import { Chess } from "chess.js";
-import type { Player } from "./types.ts";
+import type { Player } from "./player.ts";
 
 /** CallBack type after moved */
-export type Status = (chess: Chess) => void;
+export type Callback = (chess: Chess, white: Player, black: Player) => void;
 
 /** Run a single game with two players and declare a winner */
 export class ChessGame {
@@ -13,10 +13,10 @@ export class ChessGame {
   private readonly delay = 150;
 
   /** Call-back after each move */
-  private readonly afterMove: Status = (): void => {};
+  public readonly afterMove: Callback = (): void => {};
 
   /** Max count of moves */
-  private readonly max: number = Infinity;
+  // private readonly max: number = Infinity;
 
   constructor(
     public readonly white: Player,
@@ -40,18 +40,23 @@ export class ChessGame {
     const moveIndex = player.move(moves, c);
     const move = moves[moveIndex];
     c.move(move);
-    this.afterMove(c);
+    this.afterMove(c, this.white, this.black);
     return true;
   }
 
-  public play(): Player | null {
+  public play(max: number = Infinity): Player | null {
     const c = this.chess;
-    while (!c.isGameOver() && c.history().length < this.max && this.turn()) {
+    let iteration = 0;
+    while (
+      !c.isGameOver() && iteration++ < max && this.turn()
+    ) {
       // await new Promise((resolve) => setTimeout(resolve, this.delay));
     }
 
-    // Game is a draw with no winners?
+    // Game is not finished?
+    if (!c.isGameOver()) return null;
 
+    // Game is a draw with no winners?
     if (c.isDraw()) return null;
 
     // Identify a winner

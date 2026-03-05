@@ -2,7 +2,11 @@ import { assertEquals } from "@std/assert";
 import { Random } from "./random.ts";
 
 Deno.test("Name", () => {
-  const player = Random;
+  const player = new Random();
   assertEquals(player.name, "Random");
-  assertEquals(typeof player.move, "function");
+});
+
+Deno.test("Move", () => {
+  const player = new Random();
+  assertEquals(typeof player.best, "function");
 });
