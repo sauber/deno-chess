@@ -1,15 +1,13 @@
 import { Chess } from "chess.js";
+import type { Player } from "./types.ts";
 
 /** CallBack type after moved */
 export type Status = (chess: Chess) => void;
 
-/** Player definition */
-export type Player = unknown;
-
 /** Run a single game with two players and declare a winner */
 export class ChessGame {
   /** Core chess enginer */
-  private readonly chess: Chess;
+  public readonly chess: Chess;
 
   /** Delay between moves */
   private readonly delay = 150;
@@ -29,14 +27,35 @@ export class ChessGame {
     this.chess = new Chess();
   }
 
-  public play() {
+  // Make one move on board
+  private turn(): boolean {
     const c = this.chess;
-    while (!this.chess.isGameOver() && c.history().length < this.max) {
-      // Make a move
-      const moves = c.moves({ verbose: true });
-      // TODO let player decide move
-      const move = moves[Math.floor(Math.random() * moves.length)];
-      c.move(move);
+
+    // Identify legal moves
+    const moves = c.moves({ verbose: true });
+    if (moves.length === 0) return false;
+
+    // Let player decide move
+    const player = c.turn() === "w" ? this.white : this.black;
+    const moveIndex = player.move(moves, c);
+    const move = moves[moveIndex];
+    c.move(move);
+    this.afterMove(c);
+    return true;
+  }
+
+  public play(): Player | null {
+    const c = this.chess;
+    while (!c.isGameOver() && c.history().length < this.max && this.turn()) {
+      // await new Promise((resolve) => setTimeout(resolve, this.delay));
     }
+
+    // Game is a draw with no winners?
+
+    if (c.isDraw()) return null;
+
+    // Identify a winner
+    const winner: Player = c.turn() === "w" ? this.black : this.white;
+    return winner;
   }
 }
