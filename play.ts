@@ -14,9 +14,6 @@ const afterMove: Callback = (game: Chess, white: Player, black: Player) => {
   height = output.split("\n").length;
 };
 
-// const white: Player = new Flee();
-// const black: Player = new Hunt();
-
 const allPlayers: Player[] = bots();
 const [black, white] = allPlayers.sort(() => Math.random() - 0.5);
 

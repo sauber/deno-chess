@@ -12,6 +12,8 @@ import { Flee } from "./flee.ts";
 export { Flee } from "./flee.ts";
 import { Hunt } from "./hunt.ts";
 export { Hunt } from "./hunt.ts";
+import { King } from "./king.ts";
+export { King } from "./king.ts";
 import { Last } from "./last.ts";
 export { Last } from "./last.ts";
 import { Middle } from "./middle.ts";
@@ -26,6 +28,7 @@ export const bots = (): Player[] => [
   new First(),
   new Flee(),
   new Hunt(),
+  new King(),
   new Last(),
   new Middle(),
   new Random(),
