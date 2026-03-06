@@ -22,6 +22,8 @@ import { Promotion } from "./promotion.ts";
 export { Promotion } from "./promotion.ts";
 import { Random } from "./random.ts";
 export { Random } from "./random.ts";
+import { Steal } from "./steal.ts";
+export { Steal } from "./steal.ts";
 
 export const bots = (): Player[] => [
   new Capture(),
@@ -35,4 +37,5 @@ export const bots = (): Player[] => [
   new Middle(),
   new Promotion(),
   new Random(),
+  new Steal(),
 ];

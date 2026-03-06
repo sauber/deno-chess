@@ -16,7 +16,7 @@ export class Promotion extends Player {
       // No pawn, no promotion, but capture is ok too
       if (move.piece !== PAWN) return [index, captureValue];
 
-      // Immediate promotion and capture a piece while at it
+      // Promotionm Value
       const promotionValue: number = move.promotion
         ? pieceValue[move.promotion]
         : 0;
@@ -28,7 +28,7 @@ export class Promotion extends Player {
       const source: RankIndex = 8 - parseInt(move.from[1], 10);
       const target: RankIndex = 8 - parseInt(move.to[1], 10);
 
-      // Improvement of distance
+      // Improvement of distance + value of capture
       const improvement: number = (7 - source) / (7 - target);
       return [index, improvement + captureValue];
     });
