@@ -2,6 +2,7 @@ import type { Chess, PieceSymbol } from "chess.js";
 import type { Moves } from "../types.ts";
 import { Player } from "../player.ts";
 import shuffleArray from "@hugoalh/shuffle-array";
+import { pieceValue } from "./helpers.ts";
 
 /** Prioritize move which results in capture of opponent piece */
 export class Capture extends Player {
@@ -17,14 +18,6 @@ export class Capture extends Player {
 
       // Value of captured piece
       const capture: PieceSymbol = move.captured;
-      const pieceValue = {
-        p: 1,
-        n: 3,
-        b: 3,
-        r: 7,
-        q: 9,
-        k: 1000,
-      };
       const points: number = pieceValue[capture];
       return [index, points];
     });

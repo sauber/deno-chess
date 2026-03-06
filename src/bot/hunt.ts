@@ -1,29 +1,13 @@
 import { BLACK, type Chess, type Color, WHITE } from "chess.js";
 import type { Moves } from "../types.ts";
+import { Player } from "../player.ts";
+import { shuffleArray } from "@hugoalh/shuffle-array";
 import {
-  type Index,
+  distanceToNearest,
   type Indices,
   nameToIndex,
   pieces,
-  Player,
-} from "../player.ts";
-import { shuffleArray } from "@hugoalh/shuffle-array";
-
-// Geometric distance between two points
-type Point = [number, number];
-function distance(p1: Point, p2: Point): number {
-  return Math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2);
-}
-
-/** Given an Index on board, what is distance to nearest opponent */
-function distanceToNearest(from: Index, other: Indices): number {
-  const distances: number[] = other.map((square: Index) =>
-    distance(from, square)
-  );
-  const sorted = distances.sort((a, b) => a - b);
-  const shortest = sorted[0];
-  return shortest;
-}
+} from "./helpers.ts";
 
 /** Reduce distance to opponent pieces */
 export class Hunt extends Player {
