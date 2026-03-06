@@ -13,10 +13,10 @@ export class Promotion extends Player {
       // Capture Value
       const captureValue = move.captured ? pieceValue[move.captured] : 0;
 
-      // No pawn, no promotion, but capture is ok too
+      // No pawn, no promotion, but capture is better thank an aimless move
       if (move.piece !== PAWN) return [index, captureValue];
 
-      // Promotionm Value
+      // Promotion Value
       const promotionValue: number = move.promotion
         ? pieceValue[move.promotion]
         : 0;

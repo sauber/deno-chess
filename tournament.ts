@@ -4,8 +4,8 @@ import { ChessGame } from "./src/game.ts";
 
 type PlayerStats = {
   wins: number;
-  losses: number;
   draws: number;
+  losses: number;
   score: number;
 };
 
@@ -27,10 +27,10 @@ for (let i = 1; i <= rounds; i++) {
 
   // Initialize player results
   if (!(black.name in results)) {
-    results[black.name] = { wins: 0, losses: 0, draws: 0, score: 0 };
+    results[black.name] = { wins: 0, draws: 0, losses: 0, score: 0 };
   }
   if (!(white.name in results)) {
-    results[white.name] = { wins: 0, losses: 0, draws: 0, score: 0 };
+    results[white.name] = { wins: 0, draws: 0, losses: 0, score: 0 };
   }
 
   // Update results
