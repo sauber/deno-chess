@@ -18,6 +18,8 @@ import { Last } from "./last.ts";
 export { Last } from "./last.ts";
 import { Middle } from "./middle.ts";
 export { Middle } from "./middle.ts";
+import { Promotion } from "./promotion.ts";
+export { Promotion } from "./promotion.ts";
 import { Random } from "./random.ts";
 export { Random } from "./random.ts";
 
@@ -31,5 +33,6 @@ export const bots = (): Player[] => [
   new King(),
   new Last(),
   new Middle(),
+  new Promotion(),
   new Random(),
 ];
