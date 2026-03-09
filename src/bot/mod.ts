@@ -3,6 +3,10 @@ import type { Player } from "../player.ts";
 import { Capture } from "./capture.ts";
 export { Capture } from "./capture.ts";
 import { Center } from "./center.ts";
+import { Cover } from "./cover.ts";
+import { Defend } from "./defend.ts";
+export { Defend } from "./defend.ts";
+export { Cover } from "./cover.ts";
 export { Center } from "./center.ts";
 import { Edge } from "./edge.ts";
 export { Edge } from "./edge.ts";
@@ -28,6 +32,8 @@ export { Steal } from "./steal.ts";
 export const bots = (): Player[] => [
   new Capture(),
   new Center(),
+  new Cover(),
+  new Defend(),
   new Edge(),
   new First(),
   new Flee(),
