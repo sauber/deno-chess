@@ -15,7 +15,7 @@ export abstract class Player {
     if (moves.length === 1) return moves[0];
 
     // Score for each move
-    const score: [Move, number][] = moves.map((
+    const score: [Move, number, number][] = moves.map((
       move,
       index,
     ) => [move, this.rank(move, game, moves, index), index]);

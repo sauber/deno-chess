@@ -15,8 +15,8 @@ const afterMove: Callback = (game: Chess, white: Player, black: Player) => {
 };
 
 const allPlayers: Player[] = bots();
-const [black, _white] = allPlayers.sort(() => Math.random() - 0.5);
-const white = new Decent();
+const [black, white] = allPlayers.sort(() => Math.random() - 0.5);
+// const white = new Decent();
 
 const game = new ChessGame(white, black, { afterMove });
 game.play();
