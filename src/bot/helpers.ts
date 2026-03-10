@@ -1,6 +1,6 @@
 // Various help functions to help players analyze board
 
-import type { Chess, Color, PieceSymbol, Square } from "chess.js";
+import type { Chess, Color, Piece, PieceSymbol, Square } from "chess.js";
 
 /** Index of squares from chess.board() output
  * Row 0 = rank 8
@@ -62,7 +62,7 @@ export function distanceToNearest(from: SquareIndex, other: Indices): number {
 }
 
 /** Value of pieces */
-export const pieceValue = {
+export const pieceValue: Record<PieceSymbol, number> = {
   p: 1,
   n: 3,
   b: 3,

@@ -30,12 +30,15 @@ import { Promotion } from "./promotion.ts";
 export { Promotion } from "./promotion.ts";
 import { Random } from "./random.ts";
 export { Random } from "./random.ts";
+import { Score } from "./score.ts";
+export { Score } from "./score.ts";
 import { Steal } from "./steal.ts";
 export { Steal } from "./steal.ts";
 import { Wall } from "./wall.ts";
 export { Wall } from "./wall.ts";
 
 export const bots = (): Player[] => [
+  new Score(),
   new Blockade(),
   new Capture(),
   new Center(),
@@ -51,6 +54,7 @@ export const bots = (): Player[] => [
   new King(),
   new Promotion(),
   new Random(),
+  new Score(),
   new Steal(),
   new Wall(),
 ];
