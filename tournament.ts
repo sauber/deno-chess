@@ -66,6 +66,6 @@ for (let i = 1; i <= rounds; i++) {
   );
 
   // Display scores
-  console.log("Round #" + i);
-  console.log(highscore);
+  console.log("Round #" + i, highscore);
+  // console.log(highscore);
 }

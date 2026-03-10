@@ -12,6 +12,8 @@ import { Cover } from "./cover.ts";
 export { Cover } from "./cover.ts";
 import { Defend } from "./defend.ts";
 export { Defend } from "./defend.ts";
+import { Decent } from "./decent.ts";
+export { Decent } from "./decent.ts";
 import { Ditto } from "./ditto.ts";
 export { Ditto } from "./ditto.ts";
 import { Draw } from "./draw.ts";
@@ -45,6 +47,7 @@ export const bots = (): Player[] => [
   new Check(),
   new Cover(),
   new Defend(),
+  new Decent(),
   new Ditto(),
   new Draw(),
   new Edge(),
