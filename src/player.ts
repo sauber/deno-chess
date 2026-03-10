@@ -1,5 +1,6 @@
-import type { Chess, Color, Move, PieceSymbol, Square } from "chess.js";
+import type { Chess, Move } from "chess.js";
 import type { Moves } from "./types.ts";
+import shuffleArray from "@hugoalh/shuffle-array";
 
 export abstract class Player {
   // Name of player
@@ -9,15 +10,26 @@ export abstract class Player {
   public last: Move | undefined;
 
   /** Identify next move */
-  public move(moves: Moves, game: Chess): number {
-    const index: number = this.best(moves, game);
-    this.last = moves[index];
+  public move(moves: Moves, game: Chess): Move {
+    // Score for each move
+    const score: [Move, number, number][] = moves.map((
+      move,
+      index,
+    ) => [move, index, this.rank(move, game, moves, index)]);
 
-    // TODO: Identify and record captured pieces
-
-    return index;
+    // Sort moves by highest score. Pick random if multiple have same highest score.
+    const sorted = shuffleArray(score).sort((a, b) => b[2] - a[2]);
+    const highest = sorted[0];
+    const move: Move = highest[0];
+    this.last = move;
+    return move;
   }
 
-  /** Decide index of best move */
-  public abstract best(moves: Moves, game: Chess): number;
+  /** Calculate score for a move */
+  public abstract rank(
+    move: Move,
+    game: Chess,
+    moves: Moves,
+    index: number,
+  ): number;
 }

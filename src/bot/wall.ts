@@ -1,41 +1,33 @@
-import type { Chess, Color } from "chess.js";
-import type { Moves } from "../types.ts";
+import type { Chess, Color, Move } from "chess.js";
 import { Player } from "../player.ts";
-import { shuffleArray } from "@hugoalh/shuffle-array";
-import { indexToName, nameToIndex, pieces } from "./helpers.ts";
-import { avg, std } from "@sauber/statistics";
+import { indexToName, nameToIndex, pieces, type RankIndex } from "./helpers.ts";
+import { std as StdDev } from "@sauber/statistics";
 
 /** Let all pieces form a thick line */
 export class Wall extends Player {
   name = "Wall";
-  best = (moves: Moves, game: Chess) => {
-    // [index, improvement]
-    const player: Color = game.turn();
-    const direction: number = player === "w" ? 1 : -1;
-    const scores: [number, number][] = moves.map((
-      move,
-      index,
-    ) => {
-      const ranks: number[] = pieces(player, game).filter((piece) =>
-        move.from !== indexToName(piece)
-      )
-        .map((piece) => piece[0]);
-      ranks.push(nameToIndex(move.to)[0]);
-      const mean = avg(ranks);
-      const dist = std(ranks.map((rank) => rank - mean));
-      const score =
-        ((nameToIndex(move.from)[0] - nameToIndex(move.to)[0]) * direction > 0
-          ? 0
-          : 1) +
-        dist;
-      return [index, score];
-    });
+  rank = (move: Move, game: Chess): number => {
+    // Color of player
+    const color: Color = game.turn();
 
-    const sorted = shuffleArray(scores).sort((a, b) => a[1] - b[1]);
-    // console.log({ sorted });
-    const nearest = sorted[0];
-    const index = nearest[0];
+    // In which direction is forward
+    const forward: number = color === "w" ? -1 : 1;
 
-    return index;
+    // RankIndex of all pieces after move
+    const ranks: RankIndex[] = pieces(color, game).filter((piece) =>
+      move.from !== indexToName(piece)
+    ).map((piece) => piece[0]);
+    ranks.push(nameToIndex(move.to)[0]);
+
+    // Standard deviation of all RankIndex
+    const dist = StdDev(ranks);
+
+    // Forward distance of move
+    const forwardDistance: number =
+      (nameToIndex(move.to)[0] - nameToIndex(move.from)[0]) * forward;
+
+    // Forward is good. StdDev is bad.
+    const score = (forwardDistance > 0 ? 1 : 0) - dist;
+    return score;
   };
 }

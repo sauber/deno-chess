@@ -1,4 +1,4 @@
-import { Chess } from "chess.js";
+import { Chess, Move } from "chess.js";
 import type { Player } from "./player.ts";
 
 /** CallBack type after moved */
@@ -37,8 +37,7 @@ export class ChessGame {
 
     // Let player decide move
     const player = c.turn() === "w" ? this.white : this.black;
-    const moveIndex = player.move(moves, c);
-    const move = moves[moveIndex];
+    const move: Move = player.move(moves, c);
     c.move(move);
     this.afterMove(c, this.white, this.black);
     return true;

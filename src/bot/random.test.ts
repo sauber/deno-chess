@@ -8,5 +8,5 @@ Deno.test("Name", () => {
 
 Deno.test("Move", () => {
   const player = new Random();
-  assertEquals(typeof player.best, "function");
+  assertEquals(typeof player.rank, "function");
 });
