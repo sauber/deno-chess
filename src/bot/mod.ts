@@ -34,6 +34,8 @@ import { Random } from "./random.ts";
 export { Random } from "./random.ts";
 import { Score } from "./score.ts";
 export { Score } from "./score.ts";
+import { Space } from "./space.ts";
+export { Space } from "./space.ts";
 import { Steal } from "./steal.ts";
 export { Steal } from "./steal.ts";
 import { Wall } from "./wall.ts";
@@ -58,6 +60,7 @@ export const bots = (): Player[] => [
   new Promotion(),
   new Random(),
   new Score(),
+  new Space(),
   new Steal(),
   new Wall(),
 ];
