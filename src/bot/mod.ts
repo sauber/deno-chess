@@ -1,5 +1,7 @@
 import type { Player } from "../player.ts";
 
+import { Blockade } from "./blockade.ts";
+export { Blockade } from "./blockade.ts";
 import { Capture } from "./capture.ts";
 export { Capture } from "./capture.ts";
 import { Center } from "./center.ts";
@@ -34,6 +36,7 @@ import { Wall } from "./wall.ts";
 export { Wall } from "./wall.ts";
 
 export const bots = (): Player[] => [
+  new Blockade(),
   new Capture(),
   new Center(),
   new Check(),

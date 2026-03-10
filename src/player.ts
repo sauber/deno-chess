@@ -19,6 +19,7 @@ export abstract class Player {
 
     // Sort moves by highest score. Pick random if multiple have same highest score.
     const sorted = shuffleArray(score).sort((a, b) => b[2] - a[2]);
+    // console.log({ sorted });
     const highest = sorted[0];
     const move: Move = highest[0];
     this.last = move;
