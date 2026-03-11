@@ -1,7 +1,7 @@
 import { Table } from "@sauber/table";
 import type { PlayerStats, Results } from "./tournament-engine.ts";
 
-export function tournamentDashboard(results: Results, round: number): string {
+export function tournamentDashboard(results: Results, _round: number): string {
   // Reorder players from highest elo to lowest
   const highscore: Record<string, PlayerStats> = Object.fromEntries(
     Object.entries(results).sort((a, b) => b[1].elo - a[1].elo),
@@ -9,7 +9,7 @@ export function tournamentDashboard(results: Results, round: number): string {
 
   // Create a table with data
   const table = new Table();
-  table.title = "Round #" + round;
+  table.title = "Standings";
   table.headers = ["#", "Bot", "Wins", "Draws", "Losses", "Elo", "Time(ms)"];
   table.rows = Object.entries(highscore).map((
     [name, stats],

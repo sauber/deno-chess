@@ -1,5 +1,6 @@
 import type { Player } from "./player.ts";
-import { ChessGame } from "./game.ts";
+import { type Callback, ChessGame } from "./game.ts";
+import type { Chess } from "chess.js";
 
 export type PlayerStats = {
   wins: number;
@@ -16,19 +17,33 @@ export type Results = {
 
 export type TournamentCallback = (results: Results, round: number) => void;
 
+export type TournamentMoveCallback = (
+  game: Chess,
+  white: Player,
+  black: Player,
+  results: Results,
+  round: number,
+) => void;
+
 const K_FACTOR = 32;
 
 export class Tournament {
   private results: Results = {};
   public readonly rounds: number;
   public readonly onRoundComplete: TournamentCallback;
+  public readonly onMove: TournamentMoveCallback;
 
   constructor(
     public readonly players: Player[],
-    options: { rounds?: number; onRoundComplete?: TournamentCallback } = {},
+    options: {
+      rounds?: number;
+      onRoundComplete?: TournamentCallback;
+      onMove?: TournamentMoveCallback;
+    } = {},
   ) {
     this.rounds = options.rounds ?? 500;
     this.onRoundComplete = options.onRoundComplete ?? (() => {});
+    this.onMove = options.onMove ?? (() => {});
     // Reset player time at the start of a tournament
     this.players.forEach((p) => p.time = 0);
   }
@@ -54,7 +69,10 @@ export class Tournament {
 
   private playRound(round: number) {
     const [black, white] = this.pickPlayers();
-    const winner = this.playGame(white, black);
+    const afterMove: Callback = (chess, white, black) => {
+      this.onMove(chess, white, black, this.results, round);
+    };
+    const winner = this.playGame(white, black, { afterMove });
     this.updateResults(white, black, winner);
     this.onRoundComplete(this.results, round);
   }
@@ -64,8 +82,12 @@ export class Tournament {
     return [p1, p2];
   }
 
-  private playGame(white: Player, black: Player): Player | null {
-    const game = new ChessGame(white, black);
+  private playGame(
+    white: Player,
+    black: Player,
+    options: Partial<ChessGame> = {},
+  ): Player | null {
+    const game = new ChessGame(white, black, options);
     return game.play();
   }
 

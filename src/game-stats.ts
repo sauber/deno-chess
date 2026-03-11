@@ -37,5 +37,12 @@ export function gameStats(chess: Chess, white: Player, black: Player): string {
   lines[2] = "Result: " + reason;
 
   lines[7] = white.name;
+
+  // Ensure all lines are same length
+  const maxLength = Math.max(...lines.map((line) => line.length));
+  lines.forEach((line, index) => {
+    lines[index] = line.padEnd(maxLength);
+  });
+
   return lines.join("\n");
 }
