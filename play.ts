@@ -3,6 +3,7 @@ import { gameDashboard } from "./src/game-dashboard.ts";
 import { type Callback, ChessGame } from "./src/game.ts";
 import type { Player } from "./src/player.ts";
 import { bots, Space } from "./src/bot/mod.ts";
+import { globalAgent } from "node:http";
 
 // Dashboard callback
 let height: number;
@@ -20,4 +21,7 @@ const [black, white] = allPlayers.sort(() => Math.random() - 0.5);
 
 const game = new ChessGame(white, black, { afterMove });
 game.play();
+
+game.chess.setHeader("White", white.name);
+game.chess.setHeader("Black", black.name);
 console.log(game.chess.pgn());
