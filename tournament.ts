@@ -7,6 +7,7 @@ type PlayerStats = {
   draws: number;
   losses: number;
   score: number;
+  elo: number;
 };
 
 type Results = {
@@ -15,6 +16,7 @@ type Results = {
 const results: Results = {};
 
 const rounds = 500;
+const K_FACTOR = 32;
 
 for (let i = 1; i <= rounds; i++) {
   // Pick two random players
@@ -27,24 +29,44 @@ for (let i = 1; i <= rounds; i++) {
 
   // Initialize player results
   if (!(black.name in results)) {
-    results[black.name] = { wins: 0, draws: 0, losses: 0, score: 0 };
+    results[black.name] = { wins: 0, draws: 0, losses: 0, score: 0, elo: 1200 };
   }
   if (!(white.name in results)) {
-    results[white.name] = { wins: 0, draws: 0, losses: 0, score: 0 };
+    results[white.name] = { wins: 0, draws: 0, losses: 0, score: 0, elo: 1200 };
   }
+
+  // Store current Elo before update
+  const eloBlack = results[black.name].elo;
+  const eloWhite = results[white.name].elo;
+
+  // Determine game outcome for Elo calculation
+  let whiteGameScore: number;
 
   // Update results
   if (winner === black) {
     results[black.name].wins++;
     results[white.name].losses++;
+    whiteGameScore = 0;
   } else if (winner === white) {
     results[white.name].wins++;
     results[black.name].losses++;
+    whiteGameScore = 1;
   } else {
     results[black.name].draws++;
     results[white.name].draws++;
+    whiteGameScore = 0.5;
   }
+  const blackGameScore = 1 - whiteGameScore;
 
+  // Calculate and update Elo ratings
+  const expectedWhite = 1 / (1 + 10 ** ((eloBlack - eloWhite) / 400));
+  const expectedBlack = 1 - expectedWhite;
+  results[white.name].elo = Math.round(
+    eloWhite + K_FACTOR * (whiteGameScore - expectedWhite),
+  );
+  results[black.name].elo = Math.round(
+    eloBlack + K_FACTOR * (blackGameScore - expectedBlack),
+  );
   // Update score
   // Score is calculated as (3*wins + draw) / (wins+draws+losses)
   for (const n of [black.name, white.name]) {
@@ -62,7 +84,7 @@ for (let i = 1; i <= rounds; i++) {
 
   // Reorder players from highest score to lowest
   const highscore: Record<string, PlayerStats> = Object.fromEntries(
-    Object.entries(results).sort((a, b) => b[1].score - a[1].score),
+    Object.entries(results).sort((a, b) => b[1].elo - a[1].elo),
   );
 
   // Display scores
