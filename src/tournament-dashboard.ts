@@ -10,10 +10,12 @@ export function tournamentDashboard(results: Results, round: number): string {
   // Create a table with data
   const table = new Table();
   table.title = "Round #" + round;
-  table.headers = ["Bot", "Wins", "Draws", "Losses", "Elo", "Time(ms)"];
+  table.headers = ["#", "Bot", "Wins", "Draws", "Losses", "Elo", "Time(ms)"];
   table.rows = Object.entries(highscore).map((
     [name, stats],
+    index,
   ) => [
+    index + 1,
     name,
     stats.wins,
     stats.draws,
