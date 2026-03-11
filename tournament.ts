@@ -1,6 +1,7 @@
 import { bots } from "./src/bot/mod.ts";
 import type { Player } from "./src/player.ts";
 import { ChessGame } from "./src/game.ts";
+import { Table } from "@sauber/table";
 
 type PlayerStats = {
   wins: number;
@@ -105,6 +106,22 @@ for (let i = 1; i <= rounds; i++) {
   );
 
   // Display scores
-  console.log("Round #" + i, highscore);
+  // console.log("Round #" + i, highscore);
   // console.log(highscore);
+
+  // Create a table with data
+  const table = new Table();
+  table.title = "Round #" + i;
+  table.headers = ["Bot", "Wins", "Draws", "Losses", "Elo", "Time(ms)"];
+  table.rows = Object.entries(highscore).map((
+    [name, stats],
+  ) => [
+    name,
+    stats.wins,
+    stats.draws,
+    stats.losses,
+    stats.elo,
+    Math.round(stats.time),
+  ]);
+  console.log(table.toString());
 }
