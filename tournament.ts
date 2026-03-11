@@ -8,6 +8,7 @@ type PlayerStats = {
   losses: number;
   score: number;
   elo: number;
+  time: number;
 };
 
 type Results = {
@@ -29,12 +30,28 @@ for (let i = 1; i <= rounds; i++) {
 
   // Initialize player results
   if (!(black.name in results)) {
-    results[black.name] = { wins: 0, draws: 0, losses: 0, score: 0, elo: 1200 };
+    results[black.name] = {
+      wins: 0,
+      draws: 0,
+      losses: 0,
+      score: 0,
+      elo: 1200,
+      time: 0,
+    };
   }
   if (!(white.name in results)) {
-    results[white.name] = { wins: 0, draws: 0, losses: 0, score: 0, elo: 1200 };
+    results[white.name] = {
+      wins: 0,
+      draws: 0,
+      losses: 0,
+      score: 0,
+      elo: 1200,
+      time: 0,
+    };
   }
 
+  results[black.name].time += black.time;
+  results[white.name].time += white.time;
   // Store current Elo before update
   const eloBlack = results[black.name].elo;
   const eloWhite = results[white.name].elo;

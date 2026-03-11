@@ -9,16 +9,21 @@ export abstract class Player {
   // Most recent move
   public last: Move | undefined;
 
+  // Time spent thinking in ms
+  public time = 0;
+
   /** Identify next move */
   private best(moves: Moves, game: Chess): Move {
     // If there is only one move, there is no choice
     if (moves.length === 1) return moves[0];
 
-    // Score for each move
+    // Score for each move. Record time spent in bot.
+    const start = performance.now();
     const score: [Move, number, number][] = moves.map((
       move,
       index,
     ) => [move, this.rank(move, game, moves, index), index]);
+    this.time += performance.now() - start;
 
     // Sort moves by highest score. Pick random if multiple have same highest score.
     const sorted = shuffleArray(score).sort((a, b) => b[1] - a[1]);
