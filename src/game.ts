@@ -36,8 +36,10 @@ export class ChessGame {
     if (moves.length === 0) return false;
 
     // Let player decide move
-    const player = c.turn() === "w" ? this.white : this.black;
-    const move: Move = player.move(moves, c);
+    const [player, opponent]: [Player, Player] = c.turn() === "w"
+      ? [this.white, this.black]
+      : [this.black, this.white];
+    const move: Move = player.move(moves, c, opponent);
     c.move(move);
     this.afterMove(c, this.white, this.black);
     return true;

@@ -48,7 +48,7 @@ const mobilityValue = (board: Chess, color: Color): number =>
 /** Calculate board score of move */
 export class Score extends Player {
   name = "Score";
-  rank = (move: Move, game: Chess, _moves: Moves, _index: number): number => {
+  rank = (move: Move, game: Chess): number => {
     const [player, opponent]: [Color, Color] = game.turn() === WHITE
       ? [WHITE, BLACK]
       : [BLACK, WHITE];

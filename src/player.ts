@@ -13,7 +13,7 @@ export abstract class Player {
   public time = 0;
 
   /** Identify next move */
-  private best(moves: Moves, game: Chess): Move {
+  private best(moves: Moves, game: Chess, opponent: Player): Move {
     // If there is only one move, there is no choice
     if (moves.length === 1) return moves[0];
 
@@ -22,7 +22,7 @@ export abstract class Player {
     const score: [Move, number, number][] = moves.map((
       move,
       index,
-    ) => [move, this.rank(move, game, moves, index), index]);
+    ) => [move, this.rank(move, game, opponent), index]);
     this.time += performance.now() - start;
 
     // Sort moves by highest score. Pick random if multiple have same highest score.
@@ -37,9 +37,9 @@ export abstract class Player {
     return move;
   }
   /** Identify next move */
-  public move(moves: Moves, game: Chess): Move {
+  public move(moves: Moves, game: Chess, opponent: Player): Move {
     // Best move
-    const move: Move = this.best(moves, game);
+    const move: Move = this.best(moves, game, opponent);
 
     // Record move as most recent
     this.last = move;
@@ -51,7 +51,6 @@ export abstract class Player {
   public abstract rank(
     move: Move,
     game: Chess,
-    moves: Moves,
-    index: number,
+    opponent: Player,
   ): number;
 }

@@ -5,13 +5,12 @@ import { nameToIndex, type SquareIndex } from "./helpers.ts";
 /** Make a move that is as similar as possible to opponents latest move */
 export class Ditto extends Player {
   name = "Ditto";
-  rank = (move: Move, game: Chess): number => {
+  rank = (move: Move, game: Chess, opponent: Player): number => {
     // Random if first move
-    if (game.history().length === 0) return Math.random();
+    if (game.moveNumber() === 1) return Math.random();
 
     // Previous move by opponent
-    const journal: Move[] = game.history({ verbose: true });
-    const prev: Move = journal[journal.length - 1];
+    const prev: Move = opponent.last as Move;
     const from: SquareIndex = nameToIndex(prev.from);
     const to: SquareIndex = nameToIndex(prev.to);
 
