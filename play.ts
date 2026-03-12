@@ -2,7 +2,7 @@ import type { Chess } from "chess.js";
 import { gameDashboard } from "./src/game-dashboard.ts";
 import { type Callback, ChessGame } from "./src/game.ts";
 import type { Player } from "./src/player.ts";
-import { bots, Ditto } from "./src/bot/mod.ts";
+import { bots } from "./src/bot/mod.ts";
 
 // Dashboard callback
 let height: number;
@@ -15,8 +15,8 @@ const afterMove: Callback = (game: Chess, white: Player, black: Player) => {
 };
 
 const allPlayers: Player[] = bots();
-const [black, _white] = allPlayers.sort(() => Math.random() - 0.5);
-const white = new Ditto();
+const [black, white] = allPlayers.sort(() => Math.random() - 0.5);
+// const [white, black]: [Player, Player] = [new Defend(), new Capture()];
 
 const game = new ChessGame(white, black, { afterMove });
 game.play();
